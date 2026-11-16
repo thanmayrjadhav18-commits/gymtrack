@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="GYMTRACK — your simple personal workout and habit tracker.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>GYMTRACK</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#121d2e;--panel2:#18263a;--line:#293950;--ink:#f4f7fb;--muted:#a9b7c8;--accent:#8be28e;--accent2:#c4f7a8;--warn:#f3c969}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#101c2e,#0b1220 55%);color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+main{max-width:900px;margin:auto;padding:18px 14px 48px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px 20px}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:44px;height:44px;border-radius:14px;background:var(--accent);color:#102018;display:grid;place-items:center;font-weight:950;font-size:20px}.brand h1{font-size:23px;letter-spacing:1.6px;margin:0}.brand p{margin:0;color:var(--muted);font-size:12px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--panel2);color:var(--ink);font-weight:650}
+button.primary{background:var(--accent);color:#102018;border-color:var(--accent)}button:disabled{opacity:.5;cursor:default}
+.hero{background:linear-gradient(125deg,#1b3044,#17243a);border:1px solid #31445b;border-radius:20px;padding:20px;margin-bottom:14px}
+.kicker{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase}.hero h2{font-size:25px;line-height:1.15;margin:7px 0}.hero p{color:#c1ccda;margin:0 0 15px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:#0e1929a8;border:1px solid #34465a;border-radius:13px;padding:12px}.stat strong{display:block;font-size:21px}.stat span{font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:17px;margin-bottom:14px}.card h3{margin:0 0 12px;font-size:17px}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.progress{height:9px;background:#26354a;border-radius:20px;overflow:hidden;margin:12px 0 5px}.fill{height:100%;background:var(--accent);width:0%;transition:width .2s}
+.item{display:flex;gap:11px;align-items:flex-start;padding:12px 1px;border-bottom:1px solid #243248}.item:last-child{border:0}.item input{width:21px;height:21px;margin:1px 0 0;accent-color:var(--accent);flex:0 0 auto}.item strong{display:block}.sub{font-size:12px;color:var(--muted)}.done strong{text-decoration:line-through;color:#a4b1bd}
+.pill{font-size:11px;color:var(--accent);border:1px solid #42634d;border-radius:30px;padding:4px 8px;white-space:nowrap}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.day{background:var(--panel2);border:1px solid var(--line);border-radius:10px;text-align:center;padding:9px 3px;font-size:11px;color:var(--muted)}.day b{display:block;color:var(--ink);font-size:13px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.notice{font-size:12px;color:var(--muted);margin-top:10px}.footer{text-align:center;color:var(--muted);font-size:11px;padding:16px}
+input[type=date]{background:var(--panel2);color:var(--ink);border:1px solid var(--line);padding:9px;border-radius:10px;font:inherit}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.top{align-items:flex-start}.brand h1{font-size:20px}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:18px}}
+@media print{body{background:white;color:#111}.card,.hero{break-inside:avoid;background:white;color:#111;border:1px solid #bbb}.hero p,.sub,.notice,.footer{color:#444}.top button,.actions{display:none}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <div class="brand"><div class="logo">G</div><div><h1>GYMTRACK</h1><p>YOUR PERSONAL FITNESS COMPANION</p></div></div>
+    <button id="installBtn" class="primary" hidden>Install app</button>
+  </div>
+
+  <section class="hero">
+    <div class="kicker">YOUR STARTING POINT</div>
+    <h2>Build consistency.<br>Get stronger gradually.</h2>
+    <p>Week 1 · Beginner preparation · No equipment needed</p>
+    <div class="stats">
+      <div class="stat"><strong id="percent">0%</strong><span>WEEKLY PROGRESS</span></div>
+      <div class="stat"><strong id="completed">0/15</strong><span>TASKS COMPLETED</span></div>
+      <div class="stat"><strong>3</strong><span>STRENGTH DAYS</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="row"><h3>Weekly progress</h3><span class="pill" id="progressLabel">Just getting started</span></div>
+    <div class="progress"><div class="fill" id="progressFill"></div></div>
+    <div class="sub">Tick each task as you complete it. Your progress is saved on this device.</div>
+    <div class="days" style="margin-top:15px">
+      <div class="day"><b>MON</b>Strength</div><div class="day"><b>TUE</b>Light</div><div class="day"><b>WED</b>Strength</div><div class="day"><b>THU</b>Recover</div><div class="day"><b>FRI</b>Strength</div><div class="day"><b>SAT</b>Active</div><div class="day"><b>SUN</b>Rest</div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h3>Weekly activity <span class="pill">7 tasks</span></h3>
+      <div id="weekly">
+        <label class="item"><input type="checkbox" data-task="monday"><span><strong>Monday · Strength routine</strong><span class="sub">Beginner bodyweight workout</span></span></label>
+        <label class="item"><input type="checkbox" data-task="tuesday"><span><strong>Tuesday · Light activity</strong><span class="sub">Badminton or an easy walk</span></span></label>
+        <label class="item"><input type="checkbox" data-task="wednesday"><span><strong>Wednesday · Strength routine</strong><span class="sub">Beginner bodyweight workout</span></span></label>
+        <label class="item"><input type="checkbox" data-task="thursday"><span><strong>Thursday · Recovery</strong><span class="sub">Gentle mobility or rest</span></span></label>
+        <label class="item"><input type="checkbox" data-task="friday"><span><strong>Friday · Strength routine</strong><span class="sub">Beginner bodyweight workout</span></span></label>
+        <label class="item"><input type="checkbox" data-task="saturday"><span><strong>Saturday · Light activity</strong><span class="sub">Choose an enjoyable activity</span></span></label>
+        <label class="item"><input type="checkbox" data-task="sunday"><span><strong>Sunday · Rest</strong><span class="sub">Let your body recover</span></span></label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h3>Beginner workout <span class="pill">5 exercises</span></h3>
+      <div class="sub" style="margin-bottom:7px">Do on strength days. Rest 60–90 seconds between sets. Start with one set if needed.</div>
+      <label class="item"><input type="checkbox" data-task="squats"><span><strong>Bodyweight squats</strong><span class="sub">2 × 8 repetitions</span></span></label>
+      <label class="item"><input type="checkbox" data-task="pushups"><span><strong>Wall push-ups</strong><span class="sub">2 × 8 repetitions</span></span></label>
+      <label class="item"><input type="checkbox" data-task="bridges"><span><strong>Glute bridges</strong><span class="sub">2 × 10 repetitions</span></span></label>
+      <label class="item"><input type="checkbox" data-task="birddogs"><span><strong>Bird dogs</strong><span class="sub">2 × 6 per side</span></span></label>
+      <label class="item"><input type="checkbox" data-task="plank"><span><strong>Forearm plank</strong><span class="sub">2 × 10–15 seconds</span></span></label>
+    </section>
+  </div>
+
+  <section class="card">
+    <h3>Healthy habits <span class="pill">3 tasks</span></h3>
+    <label class="item"><input type="checkbox" data-task="meals"><span><strong>Eat regular, balanced meals</strong><span class="sub">Include protein foods, fruit or vegetables and varied meals.</span></span></label>
+    <label class="item"><input type="checkbox" data-task="water"><span><strong>Drink water regularly</strong><span class="sub">Especially around physical activity.</span></span></label>
+    <label class="item"><input type="checkbox" data-task="sleep"><span><strong>Get enough sleep</strong><span class="sub">Aim for 8–10 hours each night.</span></span></label>
+  </section>
+
+  <section class="card">
+    <div class="row"><h3>Tracker controls</h3><input type="date" id="weekDate" aria-label="Week starting date"></div>
+    <div class="actions">
+      <button class="primary" id="resetBtn">Reset this week</button>
+      <button id="printBtn">Print / Save PDF</button>
+    </div>
+    <p class="notice">Safety: use comfortable, controlled movements. Stop if you feel pain. Take rest days and avoid trying to do everything at once. This app stores checklist progress locally in your browser; it does not sync between devices yet.</p>
+  </section>
+  <div class="footer">GYMTRACK · Made for your fitness journey</div>
+</main>
+<script>
+const boxes=[...document.querySelectorAll('input[type=checkbox][data-task]')];
+const weekDate=document.getElementById('weekDate');
+const now=new Date();
+const monday=new Date(now); monday.setDate(now.getDate()-((now.getDay()+6)%7)); monday.setHours(0,0,0,0);
+const dateString=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+weekDate.value=dateString(monday);
+let weekKey=dateString(monday);
+function storageKey(id){return `gymtrack:${weekKey}:${id}`}
+function load(){boxes.forEach(b=>b.checked=localStorage.getItem(storageKey(b.dataset.task))==='1');update()}
+function update(){
+ const n=boxes.filter(b=>b.checked).length, pct=Math.round(n/boxes.length*100);
+ document.getElementById('completed').textContent=`${n}/${boxes.length}`;
+ document.getElementById('percent').textContent=pct+'%';
+ document.getElementById('progressFill').style.width=pct+'%';
+ document.getElementById('progressLabel').textContent=pct===100?'Week completed':pct>=50?'Great progress':pct>0?'Keep going':'Just getting started';
+ boxes.forEach(b=>b.parentElement.classList.toggle('done',b.checked));
+}
+boxes.forEach(b=>b.addEventListener('change',()=>{localStorage.setItem(storageKey(b.dataset.task),b.checked?'1':'0');update()}));
+weekDate.addEventListener('change',()=>{if(!weekDate.value)return;weekKey=weekDate.value;load()});
+document.getElementById('resetBtn').addEventListener('click',()=>{if(!confirm('Clear all ticks for the selected week?'))return;boxes.forEach(b=>{b.checked=false;localStorage.removeItem(storageKey(b.dataset.task))});update()});
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+let installPrompt=null;const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;installBtn.hidden=false});
+installBtn.addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installBtn.hidden=true});
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
